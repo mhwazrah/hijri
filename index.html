@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Hijri Calendar - Premium Islamic Calendar Browser</title>
+  <meta name="description" content="Explore the Islamic Hijri calendar with high-fidelity calculations, dual conversions, regional adjustments, and multi-language support.">
+  <meta name="theme-color" content="#0b1329">
+  <meta name="color-scheme" content="dark">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Hijri Cal">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Premium Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css?v=11">
+</head>
+<body>
+  <!-- Animated Background Elements -->
+  <div class="stars-container"></div>
+  <div class="glow-orb glow-orb-1"></div>
+  <div class="glow-orb glow-orb-2"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-lang-selector">
+        <button id="btn-lang-toggle" class="lang-toggle" type="button" onclick="toggleLanguage()" aria-label="Switch language / تبديل اللغة">
+          <svg class="lang-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span id="lbl-lang-toggle">EN</span>
+        </button>
+      </div>
+      <div class="header-logo">
+        <svg class="logo-svg" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="45" fill="none" stroke="url(#goldGrad)" stroke-width="1.5" stroke-dasharray="4, 4"/>
+          <!-- Crescent shape -->
+          <path d="M 60 25 A 28 28 0 1 0 60 75 A 23 23 0 1 1 60 25 Z" fill="url(#goldGrad)"/>
+          <polygon points="52,42 55,48 62,49 57,54 58,61 52,57 46,61 47,54 42,49 49,48" fill="#fbbf24"/>
+          <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fbbf24" />
+              <stop offset="50%" stop-color="#f59e0b" />
+              <stop offset="100%" stop-color="#d97706" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="header-text">
+          <h1 id="txt-app-title">Hijri Calendar</h1>
+          <p id="txt-app-subtitle">Premium Islamic Calendar Browser</p>
+        </div>
+      </div>
+      <div class="current-time-badge" id="current-time-badge" aria-live="polite">
+        <!-- Live Clock loaded via JS -->
+      </div>
+    </header>
+
+    <div class="main-layout">
+      <!-- Sidebar / Control Panel -->
+      <aside class="sidebar-panel">
+        <!-- Dynamic Conversion Card (moved to top) -->
+        <section class="card conversion-card" aria-labelledby="conversion-title">
+          <h2 class="card-title" id="conversion-title">
+            <svg class="icon-title" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="8 21 3 21 3 16"/><line x1="3" y1="21" x2="20" y2="4"/></svg>
+            <span id="txt-conv-title">Calendar Converter</span>
+          </h2>
+          <div class="card-glow"></div>
+          
+          <div class="tabs" role="tablist">
+            <button class="tab-btn active" id="btn-tab-g2h" role="tab" aria-selected="true" aria-controls="form-g2h" onclick="switchTab('g2h')">G ➔ H</button>
+            <button class="tab-btn" id="btn-tab-h2g" role="tab" aria-selected="false" aria-controls="form-h2g" onclick="switchTab('h2g')">H ➔ G</button>
+          </div>
+
+          <!-- Gregorian to Hijri Form (Day - Month - Year) -->
+          <div id="form-g2h" class="conversion-form active-form" role="tabpanel" aria-labelledby="btn-tab-g2h">
+            <div class="form-row">
+              <div class="input-group flex-1">
+                <label for="input-greg-day" id="lbl-greg-day-input">Day</label>
+                <input type="number" inputmode="numeric" autocomplete="off" id="input-greg-day" class="form-input" min="1" max="31" value="1">
+              </div>
+              <div class="input-group flex-2">
+                <label for="input-greg-month" id="lbl-greg-month-input">Month</label>
+                <select id="input-greg-month" class="form-input">
+                  <!-- Loaded dynamically with Gregorian months in selected language -->
+                </select>
+              </div>
+              <div class="input-group flex-1">
+                <label for="input-greg-year" id="lbl-greg-year-input">Year</label>
+                <input type="number" inputmode="numeric" autocomplete="off" id="input-greg-year" class="form-input" min="1" max="9999" value="2026">
+              </div>
+            </div>
+            <button class="btn-primary" id="btn-convert-g2h" onclick="handleG2HConvert()">Convert to Hijri</button>
+            <div id="result-g2h" class="conversion-result hidden" aria-live="polite"></div>
+          </div>
+
+          <!-- Hijri to Gregorian Form -->
+          <div id="form-h2g" class="conversion-form" role="tabpanel" aria-labelledby="btn-tab-h2g">
+            <div class="form-row">
+              <div class="input-group flex-2">
+                <label for="input-hijri-month" id="lbl-hijri-month-input">Month</label>
+                <select id="input-hijri-month" class="form-input">
+                  <!-- Loaded dynamically with Hijri months in selected language -->
+                </select>
+              </div>
+              <div class="input-group flex-1">
+                <label for="input-hijri-day" id="lbl-hijri-day-input">Day</label>
+                <input type="number" inputmode="numeric" autocomplete="off" id="input-hijri-day" class="form-input" min="1" max="30" value="1">
+              </div>
+              <div class="input-group flex-1">
+                <label for="input-hijri-year" id="lbl-hijri-year-input">Year</label>
+                <input type="number" inputmode="numeric" autocomplete="off" id="input-hijri-year" class="form-input" min="1" max="2500" value="1447">
+              </div>
+            </div>
+            <button class="btn-primary" id="btn-convert-h2g" onclick="handleH2GConvert()">Convert to Gregorian</button>
+            <div id="result-h2g" class="conversion-result hidden" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <!-- Customization Settings Card -->
+        <section class="card settings-card" aria-labelledby="settings-title">
+          <h2 class="card-title" id="settings-title">
+            <svg class="icon-title" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span id="txt-settings-title">Preferences</span>
+          </h2>
+          <div class="card-glow"></div>
+
+          <div class="input-group">
+            <label for="select-cal-method" id="lbl-cal-method">Calculation Method</label>
+            <select id="select-cal-method" class="form-input" onchange="handlePreferenceChange()">
+              <option value="islamic-umalqura" selected>Umm al-Qura (Saudi Arabia)</option>
+              <option value="islamic-civil">Tabular Civil (Standard Epoch)</option>
+              <option value="islamic-tbla">Tabular Astronomical</option>
+              <option value="islamic">Standard Astronomical</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="input-group flex-1">
+              <label for="select-offset" id="lbl-offset">Hijri Correction</label>
+              <select id="select-offset" class="form-input" onchange="handlePreferenceChange()">
+                <option value="-2">-2 Days</option>
+                <option value="-1">-1 Day</option>
+                <option value="0" selected>None (0)</option>
+                <option value="1">+1 Day</option>
+                <option value="2">+2 Days</option>
+              </select>
+            </div>
+
+          </div>
+        </section>
+      </aside>
+
+      <!-- Main Calendar Panel -->
+      <main class="calendar-panel">
+        <section class="card calendar-card">
+          <div class="card-glow"></div>
+          
+          <!-- Calendar Header (Month/Year controls) -->
+          <div class="calendar-header">
+            <div class="nav-controls year-nav">
+              <button class="nav-btn" id="btn-prev-year" onclick="adjustYear(-1)" title="Previous Year" aria-label="Previous Year">
+                &laquo;
+              </button>
+              <button class="nav-btn" id="btn-prev-month" onclick="adjustMonth(-1)" title="Previous Month" aria-label="Previous Month">
+                &lsaquo;
+              </button>
+            </div>
+
+            <div class="current-month-display" aria-live="polite" aria-atomic="true">
+              <div class="month-name-combo">
+                <span class="month-primary" id="lbl-cal-month-title">Dhu al-Hijjah</span>
+              </div>
+              <div class="year-combo">
+                <span class="year-primary" id="lbl-cal-year-title">1447 AH</span>
+                <span class="year-gregorian" id="lbl-cal-gregorian-range">May - Jun 2026</span>
+              </div>
+            </div>
+
+            <div class="nav-controls year-nav">
+              <button class="nav-btn" id="btn-next-month" onclick="adjustMonth(1)" title="Next Month" aria-label="Next Month">
+                &rsaquo;
+              </button>
+              <button class="nav-btn" id="btn-next-year" onclick="adjustYear(1)" title="Next Year" aria-label="Next Year">
+                &raquo;
+              </button>
+            </div>
+          </div>
+
+          <!-- Month grid -->
+          <div class="calendar-body">
+            <!-- Weekday headers -->
+            <div class="weekday-row" id="weekday-row" aria-hidden="true">
+              <!-- JS loads this depending on selected language -->
+            </div>
+
+            <!-- Days grid -->
+            <div class="days-grid" id="days-grid" role="group" aria-labelledby="lbl-cal-month-title lbl-cal-year-title">
+              <!-- JS loads days dynamically -->
+            </div>
+          </div>
+          
+          <div class="calendar-footer">
+            <button class="btn-secondary" id="btn-jump-today" onclick="jumpToToday()">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span id="txt-btn-today">Today</span>
+            </button>
+            <div class="legend">
+              <div class="legend-item"><span class="dot today-dot"></span><span id="txt-legend-today">Today</span></div>
+              <div class="legend-item"><span class="dot holiday-dot"></span><span id="txt-legend-holiday">Holiday</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Yearly Holidays list -->
+        <section class="card holidays-list-card" aria-labelledby="holidays-title">
+          <h2 class="card-title" id="holidays-title">
+            <svg class="icon-title" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            <span id="txt-events-title">Significant Islamic Dates & Holidays</span>
+            <span class="active-year-badge" id="lbl-holiday-active-year">1447 AH</span>
+          </h2>
+          <div class="card-glow"></div>
+
+          <div class="holidays-grid" id="holidays-list-container">
+            <!-- JS loads holidays here -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer-bar">
+      <p id="txt-footer-credits">&copy; 2026 Hijri Calendar. Powered by <span class="brand-credit">WazrahJR</span></p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="app.js?v=14"></script>
+</body>
+</html>
